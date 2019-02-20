@@ -23,17 +23,12 @@ func run_file(msaccess_file string, run_sub string, arg string) error {
 
 	ole.CoInitialize(0)
 
-	//unknown, _ := oleutil.CreateObject("Access.Application")
+
 	clsid, _ := ole.CLSIDFromString("{73A4C9C1-D68D-11D0-98BF-00A0C90DC8D9}")
 	unknown, _ := ole.CreateInstance(clsid, ole.IID_IUnknown)
 	access, _ := unknown.QueryInterface(ole.IID_IDispatch)
-	//w32.GetWindowThreadProcessId(
+	
 
-	//	global.access_ip = strconv.FormatInt((oleutil.MustCallMethod(access, "SysCmd", 609).Val), 10)
-
-	//	log.Printf("ip %s\n", global.access_ip)
-
-	global.nats_c.Publish("log", "g305transport Before OpenCurrentDatabase")
 
 	r, err := oleutil.CallMethod(access, "OpenCurrentDatabase", msaccess_file, true)
 	if err != nil {
@@ -47,9 +42,6 @@ func run_file(msaccess_file string, run_sub string, arg string) error {
 
 	r.ToIDispatch()
 
-	//	oleutil.MustCallMethod(access, "OpenCurrentDatabase", msaccess_file, true).ToIDispatch()
-
-	global.nats_c.Publish("log", "g305transport After OpenCurrentDatabase")
 
 	switch len(args) {
 	case 0:
@@ -70,7 +62,7 @@ func run_file(msaccess_file string, run_sub string, arg string) error {
 	}
 
 	oleutil.CallMethod(access, "CloseCurrentDatabase")
-	//go log_tran_update(90, "msaccess")
+	
 
 	elapsed := time.Since(start)
 
